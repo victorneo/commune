@@ -4,9 +4,9 @@ from django.http import HttpResponse
 import requests
 from users.models import User
 from guilds.models import Guild, GuildChannel
-from discord_utils.auth import get_access_token
-from discord_utils.user import get_user_info
-from discord_utils.guilds import get_guild_channels
+from utils.discord_utils.auth import get_access_token
+from utils.discord_utils.user import get_user_info
+from utils.discord_utils.guilds import get_guild_channels
 
 
 def index(request):

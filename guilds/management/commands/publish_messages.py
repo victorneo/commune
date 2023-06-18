@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.conf import settings
 from guilds.models import ScheduledMessage
-from discord.guilds import send_message_to_channel
+from utils.discord.guilds import send_message_to_channel
 
 
 class Command(BaseCommand):

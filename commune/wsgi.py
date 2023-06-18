@@ -1,5 +1,5 @@
 """
-WSGI config for accordian project.
+WSGI config for commune project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
