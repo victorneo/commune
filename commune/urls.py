@@ -23,6 +23,5 @@ admin.site.site_header = 'AC Discord Helper'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("authorization.urls")),
-    path('', include("guilds.urls")),
+    path('', include("discord_guilds.urls")),
 ]

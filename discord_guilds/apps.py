@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class GatewayConfig(AppConfig):
+class DiscordGuildsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'gateway'
+    name = 'discord_guilds'

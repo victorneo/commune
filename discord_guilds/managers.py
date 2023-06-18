@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class GuildEventManager(models.Manager):
+class DiscordGuildEventManager(models.Manager):
     def publish_events(self):
         events = self.filter(published=False)
         for e in events:

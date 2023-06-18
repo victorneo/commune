@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.conf import settings
-from gateway.models import Event
 from utils.discord_utils.gateway import get_streaming_client
 
 

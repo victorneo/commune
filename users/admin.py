@@ -4,7 +4,7 @@ from users.models import User
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ['id', 'username', 'discord_id', 'email', 'is_staff']
+    list_display = ['id', 'username', 'email', 'is_staff']
     pass
 
 

@@ -44,9 +44,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'users',
-    'guilds',
-    'authorization',
-    'gateway',
+    'discord_guilds',
+    'slack_servers',
+    'discourse_forums',
 ]
 
 MIDDLEWARE = [
