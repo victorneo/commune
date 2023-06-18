@@ -1,17 +1,17 @@
 from django.contrib import admin
-from .models import DiscordGuild, DiscordGuildChannel, DiscordGuildEvent
+from .models import Guild, GuildChannel, GuildEvent
 
 
-class DiscordGuildAdmin(admin.ModelAdmin):
+class GuildAdmin(admin.ModelAdmin):
     pass
 
-class DiscordGuildChannelAdmin(admin.ModelAdmin):
+class GuildChannelAdmin(admin.ModelAdmin):
     pass
 
-class DiscordGuildEventAdmin(admin.ModelAdmin):
+class GuildEventAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(DiscordGuild, DiscordGuildAdmin)
-admin.site.register(DiscordGuildChannel, DiscordGuildChannelAdmin)
-admin.site.register(DiscordGuildEvent, DiscordGuildEventAdmin)
+admin.site.register(Guild, GuildAdmin)
+admin.site.register(GuildChannel, GuildChannelAdmin)
+admin.site.register(GuildEvent, GuildEventAdmin)

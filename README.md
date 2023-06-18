@@ -18,6 +18,8 @@ Discourse.
 - Roles management, etc.
 - Sync with 3rd party tools
 
+- Auto unban users
+
 
 ## License
 

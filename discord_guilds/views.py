@@ -10,7 +10,7 @@ from utils.discord_utils.auth import get_access_token
 from utils.discord_utils.user import get_user_info
 from utils.discord_utils.guilds import get_guild_channels
 
-from .models import DiscordGuild, DiscordGuildChannel, DiscordGuildAdministrator
+from .models import Guild, GuildChannel, GuildAdministrator
 
 
 
@@ -75,18 +75,17 @@ def discord_callback(request):
     username = user_info.email
 
     try:
-        admin = DiscordGuildAdministrator.objects.get(discord_id=user_info.id)
-    except DiscordGuildAdministratr.DoesNotExist:
+        admin = GuildAdministrator.objects.get(discord_id=user_info.id)
+    except GuildAdministrator.DoesNotExist:
         user, user_created = User.objects.select_related('discord_admin').get_or_create(
-            discord_id=user_info.id,
+            username=username,
             defaults={
-                'username': username,
                 'email': user_info.email,
             }
         )
 
         if user_created:
-            admin = DiscordGuildAdministrator(user=user, discord_id=user_info.id)
+            admin = GuildAdministrator(user=user, discord_id=user_info.id)
         else:
             admin = user.discord_admin
 
@@ -96,7 +95,7 @@ def discord_callback(request):
 
 
     # Step 5: Create associated guild in DB
-    guild, guild_created = DiscordGuild.objects.get_or_create(
+    guild, guild_created = Guild.objects.get_or_create(
         discord_id=token.guild_info['id'],
         defaults={
             'name': token.guild_info['name'],
@@ -114,13 +113,13 @@ def discord_callback(request):
             if c.channel_type == 4:
                 continue
 
-            channels.append(DiscordGuildChannel(
+            channels.append(GuildChannel(
                 guild=guild,
                 discord_id=c.discord_id,
                 name=c.name,
                 channel_type=c.channel_type))
 
-        DiscordGuildChannel.objects.bulk_create(channels)
+        GuildChannel.objects.bulk_create(channels)
 
     msg = 'You are {}, and are you a new account: {}. Guild {} is new: {}'.format(username, user_created, guild.discord_id, guild_created)
     return render(request, 'index.html', {'message': msg})
