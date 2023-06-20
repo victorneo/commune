@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'users',
     'discord_guilds',
-    'slack_servers',
-    'discourse_forums',
+    'scheduler',
 ]
 
 MIDDLEWARE = [
