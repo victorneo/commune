@@ -88,6 +88,9 @@ def discord_callback(request):
             admin = GuildAdministrator(user=user, discord_id=user_info.id)
         else:
             admin = user.discord_admin
+    else:
+        user = admin.user
+        user_created = False
 
     admin.access_token = token.access_token
     admin.refresh_token = token.refresh_token
@@ -104,22 +107,33 @@ def discord_callback(request):
     guild.users.add(user)
 
     # Step 6: Create channels in guild
-    if guild_created:
-        discord_channels = get_guild_channels(settings.DISCORD_BOT_TOKEN, guild.discord_id)
-        channels = []
-        for c in discord_channels:
+    discord_channels = get_guild_channels(settings.DISCORD_BOT_TOKEN, guild.discord_id)
+    channels = []
 
-            # Skip channel groups
-            if c.channel_type == 4:
-                continue
+    channel_ids = [c.discord_id for c in discord_channels]
+    existing_qs = GuildChannel.objects.filter(discord_id__in=channel_ids)
+    existing_channels = {e.discord_id: e for e in existing_qs.all()}
 
+
+    for c in discord_channels:
+        # Skip channel groups
+        if c.channel_type == 4:
+            continue
+
+        if c.discord_id not in existing_channels:
             channels.append(GuildChannel(
                 guild=guild,
                 discord_id=c.discord_id,
                 name=c.name,
                 channel_type=c.channel_type))
+        else:
+            existing = existing_channels[c.discord_id]
+            if c.name != existing.name:
+                existing.name = c.name
+                existing.save()
 
-        GuildChannel.objects.bulk_create(channels)
+
+    GuildChannel.objects.bulk_create(channels)
 
     msg = 'You are {}, and are you a new account: {}. Guild {} is new: {}'.format(username, user_created, guild.discord_id, guild_created)
     return render(request, 'index.html', {'message': msg})
