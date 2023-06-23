@@ -3,7 +3,8 @@ from discord_guilds.models import GuildChannel
 
 
 class ScheduledMessage(models.Model):
-    guild_channel = models.ForeignKey(GuildChannel, null=True, blank=False, on_delete=models.CASCADE)
+    guild_channel = models.ForeignKey(GuildChannel, null=True, blank=False,
+                                      on_delete=models.CASCADE)
     message = models.TextField(null=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,3 +15,12 @@ class ScheduledMessage(models.Model):
 
     def __str__(self):
         return f'Scheduled message for {self.guild_channel} at {self.publish_time}'
+
+
+class LiveQA(models.Model):
+    guild_channel = models.ForeignKey(GuildChannel, null=True, blank=False,
+                                      on_delete=models.CASCADE)
+
+
+class LiveWorkshop(models.Model):
+    pass

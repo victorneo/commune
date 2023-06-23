@@ -4,7 +4,8 @@ from .managers import GuildEventManager
 
 
 class GuildAdministrator(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='discord_admin')
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='discord_admin')
     discord_id = models.CharField(max_length=255, null=False)
     discord_username = models.CharField(max_length=255, null=False)
 
@@ -70,7 +71,6 @@ class GuildEvent(models.Model):
     description = models.TextField(null=False)
 
     objects = GuildEventManager()
-
 
     def __str__(self):
         return f'{self.name} on {self.scheduled_start_time}'
