@@ -51,7 +51,8 @@ def send_message_to_channel(bot_token, channel_id, content):
 
     data = {
         'tts': False,
-        'content': content
+        'content': content,
+        'flags': 4,
     }
 
     resp = requests.post(DISCORD_GUILD_CREATE_MESSAGE_URL.format(channel_id), json=data, headers=headers)
