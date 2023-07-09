@@ -1,7 +1,11 @@
+import time
 import requests
 
 DISCORD_GUILD_CHANNELS_URL = 'https://discord.com/api/v10/guilds/{}/channels'
 DISCORD_GUILD_CREATE_MESSAGE_URL = 'https://discord.com/api/v10/channels/{}/messages'
+DISCORD_GUILD_START_THREAD_URL = DISCORD_GUILD_CREATE_MESSAGE_URL + '/{}/threads'
+DISCORD_GUILD_CREATE_REACTION_URL = DISCORD_GUILD_CREATE_MESSAGE_URL + '/{}/reactions/{}/@me'
+
 
 DISCORD_CHANNEL_TYPES = {
     0: 'Text Channel',
@@ -19,6 +23,10 @@ DISCORD_CHANNEL_TYPES = {
 }
 
 
+class DiscordReaction(object):
+    def __init__(self, discord_id, channel_type, name):
+        pass
+
 class DiscordChannel(object):
     def __init__(self, discord_id, channel_type, name):
         self.discord_id = discord_id
@@ -31,11 +39,14 @@ class DiscordChannel(object):
     def __repr__(self):
         return self.__str__()
 
-def get_guild_channels(bot_token, guild_id):
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bot {}'.format(bot_token)}
 
+def get_headers(bot_token):
+    return {'Content-Type': 'application/json',
+            'Authorization': 'Bot {}'.format(bot_token)}
+
+
+def get_guild_channels(bot_token, guild_id):
+    headers = get_headers(bot_token)
     resp = requests.get(DISCORD_GUILD_CHANNELS_URL.format(guild_id), headers=headers)
 
     # for each channel in resp.json(), create a DiscordChannel object
@@ -45,9 +56,7 @@ def get_guild_channels(bot_token, guild_id):
 
 
 def send_message_to_channel(bot_token, channel_id, content):
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bot {}'.format(bot_token)}
+    headers = get_headers(bot_token)
 
     data = {
         'tts': False,
@@ -55,4 +64,22 @@ def send_message_to_channel(bot_token, channel_id, content):
         'flags': 4,
     }
 
-    resp = requests.post(DISCORD_GUILD_CREATE_MESSAGE_URL.format(channel_id), json=data, headers=headers)
+    return requests.post(DISCORD_GUILD_CREATE_MESSAGE_URL.format(channel_id), json=data, headers=headers)
+
+
+def create_reactions_for_message(bot_token, channel_id, message_id, reactions):
+    headers = get_headers(bot_token)
+
+    for reaction in reactions:
+        requests.put(DISCORD_GUILD_CREATE_REACTION_URL.format(channel_id, message_id, reaction), headers=headers)
+        time.sleep(0.3)
+
+
+def create_thread_from_message(bot_token, channel_id, message_id):
+    headers = get_headers(bot_token)
+
+    data = {
+        'name': 'Poll Discussion'
+    }
+
+    return requests.post(DISCORD_GUILD_START_THREAD_URL.format(channel_id, message_id), json=data, headers=headers)
